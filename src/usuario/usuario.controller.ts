@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { CredencialesDto } from './dto/credenciales-usuario.dto';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
+
 
 @ApiTags('Usuario Controller')
+// @UseGuards(JwtAuthGuard)
 @Controller('usuario')
 export class UsuarioController {
 
@@ -43,8 +45,5 @@ export class UsuarioController {
     return this.usuarioService.remove(id);
   }
 
-  // @Post('login')
-  // login(@Body() credencialesDto : CredencialesDto) {
-  //   return this.usuarioService.acceder(credencialesDto)    
-  // }
+
 }

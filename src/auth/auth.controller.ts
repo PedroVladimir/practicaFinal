@@ -6,7 +6,9 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
 
-    constructor(private usuarioService : UsuarioService, private authService : AuthService)
+    constructor(
+        private usuarioService : UsuarioService, 
+        private authService : AuthService)
     {}
 
     @Post('/login')

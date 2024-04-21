@@ -16,4 +16,14 @@ export class PokeapiService {
       }
     }
 
+    async getAllPokemon(limit : number):Promise<any>{
+      try {
+        const response = await axios.get(`${this.url}/pokemon?limit=${limit}`)
+        return response.data.results;
+      } catch (error) {
+        console.error(error);
+        throw new Error('Error en la conexión');
+      }
+    }
+
 }

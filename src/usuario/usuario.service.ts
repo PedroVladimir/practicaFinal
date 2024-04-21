@@ -35,6 +35,9 @@ export class UsuarioService {
 
   async findOne(id: number) : Promise<Usuario>{
     const usuario = await this.usuarioRepository.buscarPorId(id);
+    if (!usuario){
+      throw new Error(`El usuario con el  ${id} no esta registrado`)
+    }
     return usuario;
   }
 
