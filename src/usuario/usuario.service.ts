@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
@@ -28,24 +28,31 @@ export class UsuarioService {
     return usuarioExistente;
   }
 
-  findAll() {
-    return this.usuarioRepository.listar();
+  async findAll() : Promise<Usuario[]> {
+    const usuarios = await this.usuarioRepository.listar();
+    return usuarios;
   }
 
-  findOne(id: number) : Promise<Usuario>{
-    return this.usuarioRepository.buscarPorId(id);
+  async findOne(id: number) : Promise<Usuario>{
+    const usuario = await this.usuarioRepository.buscarPorId(id);
+    return usuario;
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    const usuario = this.usuarioRepository.buscarPorId(id);
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    const usuario = await this.usuarioRepository.buscarPorId(id);
     if (!usuario){
-      throw new Error(`Usuari con el id ${id} no encontrado`);
+      throw new Error(`Usuario con el id ${id} no encontrado`);
     }
     return this.usuarioRepository.actualizar(id, updateUsuarioDto);
   }
 
-  remove(id: number) {
-    return this.usuarioRepository.eliminar(id);
+  async remove(id: number) : Promise<void> {
+    const usuario = await this.usuarioRepository.buscarPorId(id);
+    if (!usuario) {
+      throw new NotFoundException (`El usuario con el ${id} no existe`);
+
+    }
+    await this.usuarioRepository.eliminar(id);
   }
 
 

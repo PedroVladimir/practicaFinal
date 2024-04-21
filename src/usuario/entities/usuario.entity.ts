@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "src/roles/entities/roles.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Usuario {
@@ -16,6 +17,9 @@ export class Usuario {
 
     @Column({ type : 'varchar' })
     password : string;
+
+    @OneToMany(() => Role, role => role.usuario)
+    roles: Role[];
 
     constructor(data?: Partial<Usuario>) {
         if (data) Object.assign(this, data)

@@ -9,13 +9,11 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 @Controller('usuario')
 export class UsuarioController {
 
-  constructor(
-    private readonly usuarioService: UsuarioService) {}
-
+  constructor(private readonly usuarioService: UsuarioService) {}
 
   @ApiResponse({ status: 201, description: 'Usuario creado exitosamente' })
   @ApiResponse({ status: 401, description: 'No Autorizado' })
-  @ApiResponse({ status: 403, description: 'Usuario no encontrado' })
+  @ApiResponse({ status: 403, description: 'Usuario no creado' })
   @Post()
   @ApiBody({
     type: CreateUsuarioDto,
@@ -47,6 +45,6 @@ export class UsuarioController {
 
   // @Post('login')
   // login(@Body() credencialesDto : CredencialesDto) {
-  //  // return this.usuarioService.acceder(credencialesDto)    
+  //   return this.usuarioService.acceder(credencialesDto)    
   // }
 }
