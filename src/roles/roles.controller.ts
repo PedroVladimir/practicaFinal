@@ -13,7 +13,7 @@ export class RolesController {
 
     @ApiResponse({ status: 201, description: 'Rol creado exitosamente' })
     @ApiResponse({ status: 401, description: 'No Autorizado' })
-    @ApiResponse({ status: 403, description: 'Rol no creado' })
+    @ApiResponse({ status: 403, description: 'No tiene permiso para lo solicitado' })
     @Post()
     @ApiBody({
         type : CreateRoleDto,
@@ -25,23 +25,32 @@ export class RolesController {
     
     @ApiResponse({ status: 201, description: 'Lista Roles' })
     @ApiResponse({ status: 401, description: 'No Autorizado' })
-    @ApiResponse({ status: 403, description: 'Lista Roles no encontrado' })
+    @ApiResponse({ status: 403, description: 'No tiene permiso para lo solicitado' })
     @Get()
     findAll() {
         const roles =  this.roleService.findAll();
         return roles;
     }
 
+    @ApiResponse({ status: 201, description: 'Lista Rol' })
+    @ApiResponse({ status: 401, description: 'No Autorizado' })
+    @ApiResponse({ status: 403, description: 'No tiene permiso para lo solicitado' })
     @Get(':id')
     findOne(@Param('id') id : number) {
         return this.roleService.findOne(id);
     }
 
-    @Patch()
+    @ApiResponse({ status: 201, description: 'Rol actualizado' })
+    @ApiResponse({ status: 401, description: 'No Autorizado' })
+    @ApiResponse({ status: 403, description: 'No tiene permiso para lo solicitado' })
+    @Patch(':id')
     update(@Param('id') id : number, @Body() UpdateRoleDto : UpdateRoleDto) {
         return this.roleService.update(id, UpdateRoleDto);
     }
 
+    @ApiResponse({ status: 201, description: 'Rol eliminado' })
+    @ApiResponse({ status: 401, description: 'No Autorizado' })
+    @ApiResponse({ status: 403, description: 'No tiene permiso para lo solicitado' })
     @Delete(':id')
     remove(@Param('id') id : number) {
         return this.roleService.remove(id);

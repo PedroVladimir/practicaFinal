@@ -10,11 +10,9 @@ export class Role {
     @Column({ type : 'varchar', length : '100'})
     nombre : string;
 
-    @OneToMany(() => Role, role => role.usuario)
-    roles: Role[];
 
-    @ManyToOne(() => Usuario, usuario => usuario.roles)
-    usuario: Usuario;
+    @OneToMany(() => Usuario, usuario => usuario.role)
+    usuario: Usuario[];
 
     constructor(data? : Partial<Role>) {
         if (data) Object.assign(this, data)
