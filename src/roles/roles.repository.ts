@@ -12,19 +12,19 @@ export class RolesRepository {
         @InjectRepository(Role) private readonly roleRepository : Repository<Role>,
     ){}
 
-    crear(createRoleDto :  CreateRoleDto) {
+    crear(createRoleDto :  CreateRoleDto) : Promise<Role>   {
         return this.roleRepository.save(createRoleDto);
     }
 
-    listar() {
+    listar() : Promise<Role[]> {
         return this.roleRepository.find();
     }
 
-    buscarPorId(id :number){
-        return this.roleRepository.findOneBy({id});
+    buscarPorId(id :number) : Promise<Role>  {
+        return this.roleRepository.findOne({where: {id}});
     }
 
-    buscarPorNombre(nombre : string){
+    buscarPorNombre(nombre : string) : Promise<Role>   {
         return this.roleRepository.findOne({ where : {nombre}});
     }
 

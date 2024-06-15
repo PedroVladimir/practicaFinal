@@ -11,10 +11,10 @@ export class Role {
     nombre : string;
 
 
-    @OneToMany(() => Usuario, usuario => usuario.role)
-    usuario: Usuario[];
+    // @OneToMany(() => Usuario, usuario => usuario.role)
+    // usuario: Usuario[];
 
-    constructor(data? : Partial<Role>) {
-        if (data) Object.assign(this, data)
-    }
+    // constructor(data? : Partial<Role>) {
+    //     if (data) Object.assign(this, data)
+    // }
 }

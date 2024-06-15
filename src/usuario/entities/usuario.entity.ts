@@ -18,10 +18,10 @@ export class Usuario {
     @Column({ type : 'varchar' })
     password : string;
 
-    @ManyToOne(() => Role, role => role.usuario)
-    role: Role;
+    // @ManyToOne(() => Role, role => role.usuario)
+    // role: Role;
 
-    constructor(data?: Partial<Usuario>) {
-        if (data) Object.assign(this, data)
-    }
+    // constructor(data?: Partial<Usuario>) {
+    //     if (data) Object.assign(this, data)
+    // }
 }
