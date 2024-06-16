@@ -5,11 +5,11 @@ import { Repository } from 'typeorm';
 import { Role } from './entities/roles.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
+import { NotFoundException } from '@nestjs/common';
 
 describe('RolesService', () => {
   let service: RolesService;
   let repository : RolesRepository;
-  let mockRepository: jest.Mocked<Repository<Role>>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -31,7 +31,6 @@ describe('RolesService', () => {
 
     service = module.get<RolesService>(RolesService);
     repository = module.get<RolesRepository>(RolesRepository);
-    mockRepository = module.get(getRepositoryToken(Role));
   });
 
 
@@ -42,16 +41,17 @@ describe('RolesService', () => {
   });
 
   it('Roles Service Crear', async () => {
-    const rol : CreateRoleDto = {
+    const createRol : CreateRoleDto = {
       'id' : 1,
       'nombre' : "Administrador"
     }
 
-    jest.spyOn(repository, 'crear').mockResolvedValue( rol as Role)
+    jest.spyOn(repository, 'crear').mockImplementation( () =>  Promise. resolve(createRol) )
 
-    const result = await service.create(rol);
-    expect(result).toEqual(rol)
-    expect(repository.crear).toHaveBeenCalledWith(rol);
+    const result = await service.create(createRol);
+    expect(result).toEqual(createRol);
+    expect(repository.crear).toHaveBeenCalledWith(createRol);
+    //expect(result).toBeInstanceOf(Role);
 
   })
 
@@ -78,13 +78,26 @@ describe('RolesService', () => {
   it('Roles Service Listar/ID', async () => {
     const roles = { id: 1, nombre: 'Administrador'};
   
-    
     jest.spyOn(repository, 'buscarPorId').mockResolvedValue(roles);
 
     const result = await service.findOne(1);
 
     expect(repository.buscarPorId).toHaveBeenCalledWith(1);
-    
+  })
+
+  it('Roles Service Eliminar/ID', async() => {
+    const roleId = 1;
+    const mockRole: Role = { id: roleId, nombre: 'Admin' };
+
+    // Configuración del mock de buscarPorId
+    jest.spyOn(repository, 'buscarPorId').mockResolvedValue(mockRole);
+
+    await service.remove(roleId);
+
+    // Verificar que buscarPorId se llamó con el roleId
+    expect(repository.buscarPorId).toHaveBeenCalledWith(roleId);
+    // Verificar que eliminar se llamó con el roleId
+    //expect(repository.eliminar).toHaveBeenCalledWith(roleId);
   })
 
 });
