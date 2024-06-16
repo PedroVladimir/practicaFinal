@@ -45,9 +45,7 @@ describe('Roles Repository Test', () => {
         const result = await rolesRepository.crear(createRoleDto);
 
         expect(result).toEqual(createRoleDto); 
-        expect(result).toBeInstanceOf(createRoleDto);
         expect(mockRepository.save).toHaveBeenCalledWith(createRoleDto);    
-
     })
 
     it('Roles Repository Ver Rol', async () => {
@@ -67,16 +65,13 @@ describe('Roles Repository Test', () => {
 
     it('Roles Repository Buscar por Nombre', async() => {
         const nombreRol : string = "Administrador" 
-        const createRoleDto : Role = {
-            id : 1,
-            nombre : nombreRol
-        }
-
+        const createRoleDto : Role = { id : 1, nombre : nombreRol }
         const mockRole: Role = { id: 1, nombre: nombreRol };
 
-        const result = await rolesRepository.crear(createRoleDto);
-        const role : Role = await rolesRepository.buscarPorNombre(nombreRol);
+        mockRepository.findOne.mockResolvedValue(mockRole);
 
+        const result = await rolesRepository.crear(createRoleDto);
+        const role = await rolesRepository.buscarPorNombre(nombreRol);
 
         expect(role).toEqual(mockRole); 
         expect(role.nombre).toEqual(nombreRol); 
@@ -84,23 +79,19 @@ describe('Roles Repository Test', () => {
     })
 
     it('Roles Repository Listar Todos', async() => {
-      const listaRoles = [
-        {
-          "id": 1,
-          "nombre": "admin"
-        },
-        {
-          "id": 2,
-          "nombre": "estandar"
-        },
-        {
-          "id": 3,
-          "nombre": "otro"
+        const roles = [
+          { id: 1, nombre: 'Administrador' },
+          { id: 2, nombre: 'Estandar' },
+          { id: 3, nombre: 'Encargado' }
+        ];
+
+        for(const role of roles) {
+          await rolesRepository.crear(role);
         }
-      ];
 
+        const result = await rolesRepository.listar();
 
-
+        expect(result).toEqual(roles);
 
     })
 
@@ -113,7 +104,6 @@ describe('Roles Repository Test', () => {
         const result = await rolesRepository.crear(createRoleDto);
 
         await rolesRepository.eliminar(1); 
-
         expect(mockRepository.delete).toHaveBeenCalledWith(1); 
 
     })
