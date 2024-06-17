@@ -3,11 +3,11 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { UsuarioModule } from 'src/usuario/usuario.module';
-import { UsuarioService } from 'src/usuario/usuario.service';
-import { UsuarioRepository } from 'src/usuario/usuario.repository';
-import { jwtConstants } from 'src/constants/constant';
+import { Usuario } from '../usuario/entities/usuario.entity';
+import { UsuarioModule } from '../usuario/usuario.module';
+import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioRepository } from '../usuario/usuario.repository';
+import { jwtConstants } from '../constants/constant';
 
 @Module({
     imports : [

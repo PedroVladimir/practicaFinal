@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { PokeapiController } from './pokeapi.controller';
 import { PokeapiService } from './pokeapi.service';
-import { LoggerMiddleware } from 'src/middleware/logger.middleware';
+import { LoggerMiddleware } from '../middleware/logger.middleware';
 
 @Module({
   controllers: [PokeapiController],

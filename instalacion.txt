@@ -1,20 +1,7 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-TAREA PRACTICA N2 TESTING 
-
-## Installation
-
-```bash
+DESCARGAR EL REPOSITORIO CON EL SIGUIENTE COMANDO
 $ git clone https://github.com/PedroVladimir/practicaFinal.git practica
-```
 
-## Running the app
-
+INSTALAR DEPENDENCIAS DEL PROYECTO
 ```bash
 # ingresar al directorio
 $ cd practica
@@ -55,22 +42,3 @@ $ npm run test:usuarioservice
 
 # unit tests por usuario por serviintegracion
 $ npm run test:rolesintegration
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-
-
-## Stay in touch
-
-
-
-## License
-
-Nest is [MIT licensed](LICENSE).

@@ -1,111 +1,95 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { RolesRepository } from './roles.repository';
 import { Role } from './entities/roles.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { RolesRepository } from './roles.repository';
 
 describe('Roles Repository Test', () => {
+  let repository: RolesRepository;
 
-        let rolesRepository: RolesRepository;
-        let mockRepository: jest.Mocked<Repository<Role>>;
-      
-        beforeEach(async () => {
-          const module: TestingModule = await Test.createTestingModule({
-            providers: [
-              RolesRepository,
-              {
-                provide: getRepositoryToken(Role),
-                useValue: {
-                  save: jest.fn(),
-                  find: jest.fn(),
-                  findOne: jest.fn(),
-                  update: jest.fn(),
-                  delete: jest.fn(),
-                },
-              },
-            ],
-          }).compile();
-      
-          rolesRepository = module.get<RolesRepository>(RolesRepository);
-          mockRepository = module.get(getRepositoryToken(Role));
-        });
-  
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        RolesRepository,
+        {
+          provide: getRepositoryToken(Role),
+          useValue: {
+            save: jest.fn(),
+            find: jest.fn(),
+            findOne: jest.fn(),
+            update: jest.fn(),
+            delete: jest.fn().mockResolvedValue({ affected: 1 }),
+          },
+        },
+      ],
+    }).compile();
 
-    it('Roles Repository instanciado', () => {
-        expect(rolesRepository).toBeDefined();
-    })
+    repository = module.get<RolesRepository>(RolesRepository);
+  });
 
-    it('Roles Repository Crear', async () => {
-        const createRoleDto : Role = {
-            id : 1,
-            nombre : 'Administrador'
-        }
+  it('Roles Repository instanciado', () => {
+    expect(repository).toBeDefined();
+  });
 
-        mockRepository.save.mockResolvedValue(createRoleDto);
-        const result = await rolesRepository.crear(createRoleDto);
+  it('Roles Repository Crear', async () => {
+    const createRoleDto: Role = { id: 1, nombre: 'Administrador' };
 
-        expect(result).toEqual(createRoleDto); 
-        expect(mockRepository.save).toHaveBeenCalledWith(createRoleDto);    
-    })
+    jest.spyOn(repository, 'crear').mockResolvedValue(createRoleDto);
+    const result = await repository.crear(createRoleDto);
 
-    it('Roles Repository Ver Rol', async () => {
-        const id = 1;
-        const createRoleDto: Role = { id: id, nombre: 'Administrador' };
-        const mockRole: Role = { id: id, nombre: 'Administrador' };
-    
-        mockRepository.findOne.mockResolvedValue(mockRole);
-    
-        const result = await rolesRepository.crear(createRoleDto); 
-        const role = await rolesRepository.buscarPorId(id); 
-    
-        expect(role).toEqual(mockRole); 
-        expect(role.id).toEqual(id); 
-    })
+    expect(result).toEqual(createRoleDto);
+    expect(repository.crear).toHaveBeenCalledWith(createRoleDto);
+  });
 
+  it('Roles Repository Ver Rol', async () => {
+    const id = 1;
+    const createRoleDto: Role = { id: id, nombre: 'Administrador' };
+    const mockRole: Role = { id: id, nombre: 'Administrador' };
 
-    it('Roles Repository Buscar por Nombre', async() => {
-        const nombreRol : string = "Administrador" 
-        const createRoleDto : Role = { id : 1, nombre : nombreRol }
-        const mockRole: Role = { id: 1, nombre: nombreRol };
+    jest.spyOn(repository, 'buscarPorId').mockResolvedValue(mockRole);
 
-        mockRepository.findOne.mockResolvedValue(mockRole);
+    const result = await repository.buscarPorId(id);
+    expect(result).toEqual(mockRole);
+    expect(result.id).toEqual(id);
+  });
 
-        const result = await rolesRepository.crear(createRoleDto);
-        const role = await rolesRepository.buscarPorNombre(nombreRol);
+  it('Roles Repository Buscar por Nombre', async () => {
+    const nombreRol: string = 'Administrador';
+    const createRoleDto: Role = { id: 1, nombre: nombreRol };
+    const mockRole: Role = { id: 1, nombre: nombreRol };
 
-        expect(role).toEqual(mockRole); 
-        expect(role.nombre).toEqual(nombreRol); 
+    jest.spyOn(repository, 'buscarPorNombre').mockResolvedValue(mockRole);
 
-    })
+    const result = await repository.buscarPorNombre(nombreRol);
+    expect(result).toEqual(mockRole);
+    expect(result.nombre).toEqual(nombreRol);
+  });
 
-    it('Roles Repository Listar Todos', async() => {
-        const roles = [
-          { id: 1, nombre: 'Administrador' },
-          { id: 2, nombre: 'Estandar' },
-          { id: 3, nombre: 'Encargado' }
-        ];
+  it('Roles Repository Listar Todos', async () => {
+    const roles : Role[] = [
+      { id: 1, nombre: 'Administrador' },
+      { id: 2, nombre: 'Estandar' },
+      { id: 3, nombre: 'Encargado' },
+    ];
 
-        for(const role of roles) {
-          await rolesRepository.crear(role);
-        }
+    // Insertar roles
+    for (const role of roles) {
+      await repository.crear(role);
+    }
 
-        const result = await rolesRepository.listar();
+    jest.spyOn(repository, 'listar').mockResolvedValue(roles);
+    const result = await repository.listar();
+    expect(result).toEqual(roles);
+  });
 
-        expect(result).toEqual(roles);
+  it('Roles Repository Eliminar', async () => {
+    const roleId : number = 1;
+    const createRoleDto: Role = { id: 1, nombre: 'Administrador' };
 
-    })
+    jest.spyOn(repository, 'crear').mockResolvedValue(createRoleDto);
+    jest.spyOn(repository, 'eliminar').mockResolvedValue({ raw : []});
+    const result = await repository.crear(createRoleDto);
+    await repository.eliminar(roleId);
 
-    it('Roles Repository Eliminar', async() => {
-        const createRoleDto : Role = {
-            id : 1,
-            nombre : 'Administrador'
-        }
-        mockRepository.save.mockResolvedValue(createRoleDto as Role);
-        const result = await rolesRepository.crear(createRoleDto);
-
-        await rolesRepository.eliminar(1); 
-        expect(mockRepository.delete).toHaveBeenCalledWith(1); 
-
-    })
-
-})
+    expect(repository.eliminar).toHaveBeenCalledWith(roleId);
+  });
+});

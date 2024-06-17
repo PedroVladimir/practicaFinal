@@ -18,7 +18,13 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "test:roles": "jest --testPathPattern=src/roles/roles.service.spec.ts"
+    "test:rolesrepository": "jest --testPathPattern=src/roles/roles.repository.spec.ts",
+    "test:rolesservice": "jest --testPathPattern=src/roles/roles.service.spec.ts",
+    "test:rolescontroller": "jest --testPathPattern=src/roles/roles.controller.spec.ts",
+    "test:rolesintegration": "jest --testPathPattern=src/roles/roles.controller.integration.spec.ts",
+    "test:roles": "jest --testPathPattern=src/roles",
+    "test:usuarioservice": "jest --testPathPattern=src/usuario/usuario.service.spec.ts",
+    "test:usuariointegration": "jest --testPathPattern=src/usuario/usuario.controller.integration.spec.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
